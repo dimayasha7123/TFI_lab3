@@ -6,11 +6,19 @@
 
 package CompressionMethods.Abstract;
 
-public class AbstractMethod {
+public abstract class AbstractMethod {
     protected final Integer[] input;
+
     protected Integer[] output;
+    public Integer[] getOutput() {
+        return output;
+    }
 
     public AbstractMethod(Integer[] data) {
         this.input = data;
     }
+
+    public abstract void Compress(boolean print);
+    public abstract void Decompress(boolean print);
+
 }
