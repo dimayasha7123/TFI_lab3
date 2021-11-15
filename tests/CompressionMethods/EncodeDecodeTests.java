@@ -32,12 +32,25 @@ class EncodeDecodeTests {
         }
     }
 
-
     void CommonTest(AbstractMethod encMethod, AbstractMethod decMethod, String methodName) {
         String encPath = "testData\\encoded\\" + methodName + "\\";
         String decPath = "testData\\decoded\\" + methodName + "\\";
         String encPrefix = "ENC_";
         String decPrefix = "DEC_";
+
+        //удаляем все в encPath
+        File[] forDelete = Objects.requireNonNull(new File(encPath).listFiles());
+        Arrays.stream(forDelete).forEach((x) -> {
+            boolean deleted = x.delete();
+            if (!deleted) System.out.println(x + "почему-то не удален ¯\\_(ツ)_/¯");
+        });
+
+        //удаляем все в decPath
+        forDelete = Objects.requireNonNull(new File(decPath).listFiles());
+        Arrays.stream(forDelete).forEach((x) -> {
+            boolean deleted = x.delete();
+            if (!deleted) System.out.println(x + "почему-то не удален ¯\\_(ツ)_/¯");
+        });
 
         //сжимаем
         srcData.forEach((x) -> {
@@ -65,9 +78,6 @@ class EncodeDecodeTests {
             fw.WriteAll();
         });
 
-        //todo посчитать, во сколько раз сжимаются
-
-
         File decDir = new File(decPath);
         File srcDir = new File(srcPath);
         File[] decFiles = Objects.requireNonNull(decDir.listFiles());
@@ -85,26 +95,23 @@ class EncodeDecodeTests {
             actual[i] = decFiles[i].length();
             encoded[i] = encFiles[i].length();
         }
-
-        assertArrayEquals(expected, actual);
-
         System.out.println(methodName + " report:");
-        System.out.println("actual = " + Arrays.toString(actual));
-        System.out.println("expected = " + Arrays.toString(expected));
-        System.out.println("encoded = " + Arrays.toString(encoded));
 
         ArrayList<Object[]> tableData = new ArrayList<>();
-        tableData.add(new Object[]{"Source", "Encoded", "Decoded", "Compress. rate"});
+        tableData.add(new Object[]{"File", "Source", "Encoded", "Decoded", "Compress. rate"});
         double avgRatio = 0;
         for (int i = 0; i < n; ++i) {
             double ratio = (double) actual[i] / (double) encoded[i];
             avgRatio += ratio;
-            tableData.add(new Object[]{actual[i], encoded[i], expected[i], ratio});
+            tableData.add(new Object[]{srcData.get(i).y, actual[i], encoded[i], expected[i], ratio});
         }
         avgRatio /= n;
 
         System.out.println(Table.TableToString(tableData.toArray(Object[][]::new)));
         System.out.printf("Average compression = %.2f\n", avgRatio);
+
+        assertArrayEquals(expected, actual);
+
     }
 
     @DisplayName("RLE")

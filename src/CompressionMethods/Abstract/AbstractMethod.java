@@ -26,7 +26,7 @@ public abstract class AbstractMethod {
     }
 
     public AbstractMethod() {
-        this(new Integer[]{69});
+        this(new Integer[]{69, 34, 42});
     }
 
     public AbstractMethod(Integer[] data) {
