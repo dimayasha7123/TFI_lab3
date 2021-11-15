@@ -1,10 +1,9 @@
 package TFI_lab3;
 
-import CompressionMethods.RLE;
+import CompressionMethods.RLEDecoding;
+import CompressionMethods.RLEEncoding;
 import Utils.UTF16FileReader;
 import Utils.UTF16FileWriter;
-
-import java.util.*;
 
 import static TFI_lab3.Global.defPath;
 
@@ -17,18 +16,25 @@ public class Main {
 
         UTF16FileReader fileReader = new UTF16FileReader(path);
         fileReader.ReadToEnd();
-        fileReader.printHexDump();
+        //fileReader.printHexDump();
 
         Integer[] arrInt = fileReader.getData();
         System.out.printf("Считано символов: %d\n", arrInt.length);
 
-        RLE rle = new RLE(arrInt);
-        rle.Compress(true);
+        RLEEncoding rleEnc = new RLEEncoding(arrInt);
+        rleEnc.Invoke(true);
 
-        String destPath = defPath + "rle.txt";
+        String encodedPath = defPath + "rle1.txt";
 
-        UTF16FileWriter fw = new UTF16FileWriter(destPath, rle.getOutput());
+        UTF16FileWriter fw = new UTF16FileWriter(encodedPath, rleEnc.getOutput());
         fw.WriteAll();
 
+        /*UTF16FileReader fr = new UTF16FileReader(defPath + "rle2.txt");
+        fr.ReadToEnd();
+        fr.printHexDump();*/
+
+        RLEDecoding rleDec = new RLEDecoding(encodedPath);
+        rleDec.Invoke(true);
+        rleDec.WriteTo(defPath + "test2_encoded_decoded.txt");
     }
 }

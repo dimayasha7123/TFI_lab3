@@ -14,14 +14,19 @@ import java.util.Collections;
 
 import static TFI_lab3.Global.half;
 
-public class RLE extends AbstractMethod {
+public class RLEEncoding extends AbstractMethod {
 
-    public RLE(Integer[] data) {
+    public RLEEncoding(Integer[] data) {
         super(data);
     }
 
+    public RLEEncoding(String path)
+    {
+        super(path);
+    }
+
     @Override
-    public void Compress(boolean print) {
+    public void Invoke(boolean print) {
         int sum = 0;            //контрольная сумма
         int counter = 1;        //счетчик подярд идущих
         int counterOnes = 1;    //кол-во подряд идущих разных одинарных символов
@@ -129,11 +134,6 @@ public class RLE extends AbstractMethod {
         }
 
         output = outputArr.toArray(Integer[]::new);
-        if (print) System.out.printf("Контрольная сумма = %d", sum);
-    }
-
-    @Override
-    public void Decompress(boolean print) {
-
+        if (print) System.out.printf("Контрольная сумма = %d\n", sum);
     }
 }

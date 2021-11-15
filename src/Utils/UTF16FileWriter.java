@@ -6,8 +6,8 @@
 
 package Utils;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class UTF16FileWriter {
     protected final String path;
@@ -24,7 +24,9 @@ public class UTF16FileWriter {
 
     public void WriteAll(){
         try {
-            FileWriter fw = new FileWriter(path, false);
+            Writer fw = new OutputStreamWriter(
+                    new FileOutputStream(path, false), StandardCharsets.UTF_16
+            );
             for (Integer datum : data) {
                 fw.write(String.format("%c", datum));
             }
@@ -33,6 +35,5 @@ public class UTF16FileWriter {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }
