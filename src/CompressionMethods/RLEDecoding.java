@@ -13,6 +13,11 @@ import java.util.ArrayList;
 import static TFI_lab3.Global.half;
 
 public class RLEDecoding extends AbstractMethod {
+
+    public RLEDecoding() {
+        super();
+    }
+
     public RLEDecoding(Integer[] data) {
         super(data);
     }

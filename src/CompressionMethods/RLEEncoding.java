@@ -16,12 +16,15 @@ import static TFI_lab3.Global.half;
 
 public class RLEEncoding extends AbstractMethod {
 
+    public RLEEncoding() {
+        super();
+    }
+
     public RLEEncoding(Integer[] data) {
         super(data);
     }
 
-    public RLEEncoding(String path)
-    {
+    public RLEEncoding(String path) {
         super(path);
     }
 
