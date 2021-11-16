@@ -38,6 +38,8 @@ class EncodeDecodeTests {
         String encPrefix = "ENC_";
         String decPrefix = "DEC_";
 
+        //todo Добавить логи того, что сейчас происходит
+
         //удаляем все в encPath
         File[] forDelete = Objects.requireNonNull(new File(encPath).listFiles());
         Arrays.stream(forDelete).forEach((x) -> {
@@ -98,7 +100,7 @@ class EncodeDecodeTests {
         System.out.println(methodName + " report:");
 
         ArrayList<Object[]> tableData = new ArrayList<>();
-        tableData.add(new Object[]{"File", "Source", "Encoded", "Decoded", "Compress. rate"});
+        tableData.add(new Object[]{"File", "Source", "Encoded", "Decoded", "Compress."});
         double avgRatio = 0;
         for (int i = 0; i < n; ++i) {
             double ratio = (double) actual[i] / (double) encoded[i];

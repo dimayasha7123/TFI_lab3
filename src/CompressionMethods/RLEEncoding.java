@@ -114,6 +114,10 @@ public class RLEEncoding extends AbstractMethod {
         }
 
         if (counterOnes != 1) {
+            //случай переполнения скип
+            counterOnes++;
+            ones.add(prev);
+
             sum += counterOnes - 1;
 
             int num = counterOnes - 2 + half;
