@@ -38,32 +38,61 @@ class EncodeDecodeTests {
         String encPrefix = "ENC_";
         String decPrefix = "DEC_";
 
-        //todo Добавить логи того, что сейчас происходит
+        //проверяем, есть ли папка, если есть удаляем, иначе создаем
+        File encDir = new File(encPath);
+        File decDir = new File(decPath);
 
-        //удаляем все в encPath
-        File[] forDelete = Objects.requireNonNull(new File(encPath).listFiles());
-        Arrays.stream(forDelete).forEach((x) -> {
-            boolean deleted = x.delete();
-            if (!deleted) System.out.println(x + "почему-то не удален ¯\\_(ツ)_/¯");
-        });
+        if (encDir.exists()){
+            System.out.printf("%s directory is exist\n", encPath);
 
-        //удаляем все в decPath
-        forDelete = Objects.requireNonNull(new File(decPath).listFiles());
-        Arrays.stream(forDelete).forEach((x) -> {
-            boolean deleted = x.delete();
-            if (!deleted) System.out.println(x + "почему-то не удален ¯\\_(ツ)_/¯");
-        });
+            File[] forDelete = Objects.requireNonNull(encDir.listFiles());
+            Arrays.stream(forDelete).forEach((x) -> {
+                boolean deleted = x.delete();
+
+                if (!deleted) System.out.println(x + " for some reason not deleted ¯\\_(ツ)_/¯");
+                else System.out.println(x + " deleted");
+            });
+        }
+        else{
+            boolean created = encDir.mkdir();
+
+            if(!created) System.out.printf("%s directory has NOT been created\n", encPath);
+            else System.out.printf("%s directory has been created\n", encPath);
+        }
+
+        if (decDir.exists()){
+            System.out.printf("%s directory is exist\n", decPath);
+
+            File[] forDelete = Objects.requireNonNull(decDir.listFiles());
+            Arrays.stream(forDelete).forEach((x) -> {
+                boolean deleted = x.delete();
+
+                if (!deleted) System.out.println(x + " for some reason not deleted ¯\\_(ツ)_/¯");
+                else System.out.println(x + " deleted");
+            });
+        }
+        else{
+            boolean created = decDir.mkdir();
+
+            if(!created) System.out.printf("%s directory has NOT been created\n", decPath);
+            else System.out.printf("%s directory has been created\n", decPath);
+        }
 
         //сжимаем
         srcData.forEach((x) -> {
             encMethod.setInput(x.x);
+
+            System.out.printf("Encoding %s ...\n", x.y);
             encMethod.Invoke(false);
+            System.out.println("Success");
+
             UTF16FileWriter fw = new UTF16FileWriter(encPath + encPrefix + x.y, encMethod.getOutput());
             fw.WriteAll();
         });
 
         //считываем сжатое
-        File encDir = new File(encPath);
+        //File encDir = new File(encPath);
+        System.out.println("Reading encoded data ...");
         String[] encPaths = encDir.list();
         ArrayList<Tuple<Integer[], String>> forDec = new ArrayList<>();
         for (String path : Objects.requireNonNull(encPaths)) {
@@ -71,16 +100,19 @@ class EncodeDecodeTests {
             fr.ReadToEnd();
             forDec.add(new Tuple<>(fr.getData(), path));
         }
+        System.out.println("Success");
 
         //разжимаем
         forDec.forEach((x) -> {
             decMethod.setInput(x.x);
+            System.out.printf("Decoding %s ...\n", x.y);
             decMethod.Invoke(false);
+            System.out.println("Success");
             UTF16FileWriter fw = new UTF16FileWriter(decPath + decPrefix + x.y, decMethod.getOutput());
             fw.WriteAll();
         });
 
-        File decDir = new File(decPath);
+        //File decDir = new File(decPath);
         File srcDir = new File(srcPath);
         File[] decFiles = Objects.requireNonNull(decDir.listFiles());
         File[] srcFiles = Objects.requireNonNull(srcDir.listFiles());
@@ -108,6 +140,7 @@ class EncodeDecodeTests {
             tableData.add(new Object[]{srcData.get(i).y, actual[i], encoded[i], expected[i], ratio});
         }
         avgRatio /= n;
+
 
         System.out.println(Table.TableToString(tableData.toArray(Object[][]::new)));
         System.out.printf("Average compression = %.2f\n", avgRatio);
