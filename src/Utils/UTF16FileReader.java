@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,9 +19,11 @@ import java.util.Objects;
 public class UTF16FileReader {
     protected final String path;
     protected Integer[] data;
+    protected final Charset charset;
 
-    public UTF16FileReader(String path) {
+    public UTF16FileReader(String path, Charset charset) {
         this.path = path;
+        this.charset = charset;
     }
 
     public Integer[] getData() {
@@ -29,7 +32,7 @@ public class UTF16FileReader {
 
     public void ReadToEnd() {
         try {
-            InputStreamReader isr = new InputStreamReader(new FileInputStream(path), StandardCharsets.UTF_16);
+            InputStreamReader isr = new InputStreamReader(new FileInputStream(path), charset);
             ArrayList<Integer> intList = new ArrayList<>();
             int c = -1;
             while (true) {

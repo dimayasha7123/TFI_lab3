@@ -8,6 +8,7 @@ package CompressionMethods;
 
 import CompressionMethods.Abstract.AbstractMethod;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import static TFI_lab3.Global.half;
@@ -22,8 +23,8 @@ public class RLEDecoding extends AbstractMethod {
         super(data);
     }
 
-    public RLEDecoding(String path) {
-        super(path);
+    public RLEDecoding(String path, Charset charset) {
+        super(path, charset);
     }
 
     @Override

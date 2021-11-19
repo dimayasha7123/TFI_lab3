@@ -8,6 +8,7 @@ package CompressionMethods;
 
 import CompressionMethods.Abstract.AbstractMethod;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,8 +25,8 @@ public class RLEEncoding extends AbstractMethod {
         super(data);
     }
 
-    public RLEEncoding(String path) {
-        super(path);
+    public RLEEncoding(String path, Charset charset) {
+        super(path, charset);
     }
 
     @Override

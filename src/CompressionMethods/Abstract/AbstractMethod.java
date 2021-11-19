@@ -9,6 +9,9 @@ package CompressionMethods.Abstract;
 import Utils.UTF16FileReader;
 import Utils.UTF16FileWriter;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
 public abstract class AbstractMethod {
     protected Integer[] input;
     protected Integer[] output;
@@ -33,16 +36,16 @@ public abstract class AbstractMethod {
         this.input = data;
     }
 
-    public AbstractMethod(String path) {
-        UTF16FileReader fileReader = new UTF16FileReader(path);
+    public AbstractMethod(String path, Charset charset) {
+        UTF16FileReader fileReader = new UTF16FileReader(path, charset);
         fileReader.ReadToEnd();
         input = fileReader.getData();
     }
 
     public abstract void Invoke(boolean print);
 
-    public void WriteTo(String path) {
-        UTF16FileWriter fw = new UTF16FileWriter(path, getOutput());
+    public void WriteTo(String path, Charset charset) {
+        UTF16FileWriter fw = new UTF16FileWriter(path, getOutput(), charset);
         fw.WriteAll();
     }
 }

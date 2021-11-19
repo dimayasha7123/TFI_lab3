@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.lang.model.SourceVersion;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
@@ -26,7 +27,8 @@ class EncodeDecodeTests {
         File srcDir = new File(srcPath);
         String[] files = srcDir.list();
         for (String path : Objects.requireNonNull(files)) {
-            UTF16FileReader fr = new UTF16FileReader(srcPath + path);
+            UTF16FileReader fr = new UTF16FileReader(
+                    srcPath + path, StandardCharsets.UTF_16);
             fr.ReadToEnd();
             srcData.add(new Tuple<>(fr.getData(), path));
         }
@@ -86,7 +88,8 @@ class EncodeDecodeTests {
             encMethod.Invoke(false);
             System.out.println("Success");
 
-            UTF16FileWriter fw = new UTF16FileWriter(encPath + encPrefix + x.y, encMethod.getOutput());
+            UTF16FileWriter fw = new UTF16FileWriter(
+                    encPath + encPrefix + x.y, encMethod.getOutput(), StandardCharsets.UTF_16);
             fw.WriteAll();
         });
 
@@ -96,7 +99,8 @@ class EncodeDecodeTests {
         String[] encPaths = encDir.list();
         ArrayList<Tuple<Integer[], String>> forDec = new ArrayList<>();
         for (String path : Objects.requireNonNull(encPaths)) {
-            UTF16FileReader fr = new UTF16FileReader(encPath + path);
+            UTF16FileReader fr = new UTF16FileReader(
+                    encPath + path, StandardCharsets.UTF_16);
             fr.ReadToEnd();
             forDec.add(new Tuple<>(fr.getData(), path));
         }
@@ -108,7 +112,8 @@ class EncodeDecodeTests {
             System.out.printf("Decoding %s ...\n", x.y);
             decMethod.Invoke(false);
             System.out.println("Success");
-            UTF16FileWriter fw = new UTF16FileWriter(decPath + decPrefix + x.y, decMethod.getOutput());
+            UTF16FileWriter fw = new UTF16FileWriter(
+                    decPath + decPrefix + x.y, decMethod.getOutput(), StandardCharsets.UTF_16);
             fw.WriteAll();
         });
 
@@ -158,7 +163,7 @@ class EncodeDecodeTests {
     @DisplayName("LZ77")
     @Test
     void LZ77Test() {
-
+        CommonTest(new LZ77Encoding(), new LZ77Decoding(), "LZ77");
     }
 
     @DisplayName("Huffman")
